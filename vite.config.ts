@@ -1,8 +1,13 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [vue()],
-  base: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : '/',
-})
+export default ({ mode }) => {
+  const loadedEnvs = loadEnv(mode, process.cwd())
+
+  console.log('loadedEnvs :>> ', loadedEnvs)
+
+  return defineConfig({
+    plugins: [vue()],
+    base: mode === 'production' ? loadedEnvs.VITE_APP_BASE_URL : '/',
+  })
+}
